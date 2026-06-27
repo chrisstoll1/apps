@@ -1,0 +1,38 @@
+annotations:
+  min_scale_version: 24.10.2.2
+app_version: 0.1.0
+capabilities: []
+categories:
+- media
+date_added: '2026-06-27'
+description: Discord chatbot for Plex, Sonarr, and Radarr repair workflows powered
+  by Pi Coding Agent.
+home: https://github.com/chrisstoll1/plex-repair-discord-bot
+host_mounts: []
+icon: https://raw.githubusercontent.com/chrisstoll1/plex-repair-discord-bot/master/src/web/assets/repairman.png
+keywords:
+- media
+- plex
+- sonarr
+- radarr
+- discord
+lib_version: 2.3.7
+lib_version_hash: a1f0c3504b0ae36f23589fb48b4f38e2377253addf49f87941e9d9d650f28ecf
+maintainers:
+- email: dev@truenas.com
+  name: truenas
+  url: https://www.truenas.com/
+name: plex-repairman
+run_as_context:
+- description: Container [plex-repairman] can run as any non-root user and group.
+  gid: 568
+  group_name: Host group is [apps]
+  uid: 568
+  user_name: Host user is [apps]
+screenshots: []
+sources:
+- https://apps.truenas.com/catalog/plex-repairman_community/
+- https://github.com/chrisstoll1/plex-repair-discord-bot
+title: Plex Repairman
+train: community
+version: 1.0.0
