@@ -1,0 +1,23 @@
+isponsorblocktv:
+  username: admin
+  password: test-password-change-me
+run_as:
+  user: 568
+  group: 568
+network:
+  web_port:
+    bind_mode: published
+    port_number: 8080
+    host_ips: []
+storage:
+  config:
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: config
+ix_volumes:
+  config: /opt/tests/isponsorblocktv/config
+labels: []
+resources:
+  limits:
+    cpus: 1
+    memory: 512

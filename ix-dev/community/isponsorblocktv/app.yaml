@@ -1,0 +1,41 @@
+app_version: 2.11.1
+capabilities: []
+categories:
+- media
+changelog_url: https://github.com/chrisstoll1/iSponsorBlockTV/releases
+date_added: '2026-11-17'
+description: Skip SponsorBlock segments on YouTube TV clients, with a browser dashboard
+  for pairing and configuration.
+home: https://github.com/chrisstoll1/iSponsorBlockTV
+host_mounts: []
+icon: https://media.sys.truenas.net/apps/isponsorblocktv/icons/icon.png
+keywords:
+- youtube
+- sponsorblock
+- media
+lib_version: 2.3.20
+lib_version_hash: cb54aeb50c3d06a90e5d9e80a852317db8336b4c68456aaaa6ce61fc2f8ed1dd
+maintainers:
+- email: dev@truenas.com
+  name: truenas
+  url: https://www.truenas.com/
+name: isponsorblocktv
+run_as_context:
+- description: Container [dashboard] can run as any non-root user and group.
+  gid: 568
+  group_name: Host group is [apps]
+  uid: 568
+  user_name: Host user is [apps]
+- description: Container [worker] can run as any non-root user and group.
+  gid: 568
+  group_name: Host group is [apps]
+  uid: 568
+  user_name: Host user is [apps]
+screenshots: []
+sources:
+- https://apps.truenas.com/catalog/isponsorblocktv_community/
+- https://github.com/chrisstoll1/iSponsorBlockTV
+- https://github.com/dmunozv04/iSponsorBlockTV
+title: iSponsorBlockTV
+train: community
+version: 1.0.0

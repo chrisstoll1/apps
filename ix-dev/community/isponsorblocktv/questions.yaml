@@ -1,0 +1,283 @@
+groups:
+- name: iSponsorBlockTV Configuration
+  description: Configure isponsorblocktv configuration
+- name: User and Group Configuration
+  description: Configure user and group configuration
+- name: Network Configuration
+  description: Configure network configuration
+- name: Storage Configuration
+  description: Configure storage configuration
+- name: Labels Configuration
+  description: Configure labels configuration
+- name: Resources Configuration
+  description: Configure resources configuration
+questions:
+- variable: isponsorblocktv
+  label: ''
+  group: iSponsorBlockTV Configuration
+  schema:
+    type: dict
+    attrs:
+    - variable: username
+      label: Dashboard Username
+      schema:
+        type: string
+        default: admin
+        required: true
+    - variable: password
+      label: Dashboard Password
+      description: Choose a unique password. Sign in to the Web UI to pair TVs and
+        configure skipping.
+      schema:
+        type: string
+        private: true
+        required: true
+        min_length: 12
+- group: User and Group Configuration
+  label: ''
+  schema:
+    attrs:
+    - description: The user id that iSponsorBlockTV files will be owned by.
+      label: User ID
+      schema:
+        default: 568
+        min: 1
+        required: true
+        type: int
+      variable: user
+    - description: The group id that iSponsorBlockTV files will be owned by.
+      label: Group ID
+      schema:
+        default: 568
+        min: 1
+        required: true
+        type: int
+      variable: group
+    type: dict
+  variable: run_as
+- group: Network Configuration
+  label: ''
+  schema:
+    attrs:
+    - label: WebUI Port
+      schema:
+        attrs:
+        - description: 'The port bind mode.</br>
+
+            - Publish: The port will be published on the host for external access.</br>
+
+            - Expose: The port will be exposed for inter-container communication.</br>
+
+            - None: The port will not be exposed or published.</br>
+
+            Note: If the Dockerfile defines an EXPOSE directive,
+
+            the port will still be exposed for inter-container communication regardless
+            of this setting.
+
+            '
+          label: Port Bind Mode
+          schema:
+            default: published
+            enum:
+            - description: Publish port on the host for external access
+              value: published
+            - description: Expose port for inter-container communication
+              value: exposed
+            - description: None
+              value: ''
+            type: string
+          variable: bind_mode
+        - label: Port Number
+          schema:
+            default: 30600
+            max: 65535
+            min: 1
+            required: true
+            type: int
+          variable: port_number
+        - description: IPs on the host to bind this port
+          label: Host IPs
+          schema:
+            default: []
+            items:
+            - label: Host IP
+              schema:
+                $ref:
+                - definitions/node_bind_ip
+                required: true
+                type: string
+              variable: host_ip
+            show_if:
+            - - bind_mode
+              - '='
+              - published
+            type: list
+          variable: host_ips
+        type: dict
+      variable: web_port
+    type: dict
+  variable: network
+- group: Storage Configuration
+  label: ''
+  schema:
+    attrs:
+    - label: Config Storage
+      schema:
+        attrs:
+        - description: 'ixVolume: Is dataset created automatically by the system.</br>
+
+            Host Path: Is a path that already exists on the system.
+
+            '
+          label: Type
+          schema:
+            default: ix_volume
+            enum:
+            - description: Host Path (Path that already exists on the system)
+              value: host_path
+            - description: ixVolume (Dataset created automatically by the system)
+              value: ix_volume
+            required: true
+            type: string
+          variable: type
+        - description: The configuration for the ixVolume dataset.
+          label: ixVolume Configuration
+          schema:
+            $ref:
+            - normalize/ix_volume
+            attrs:
+            - description: Enable ACL for the storage.
+              label: Enable ACL
+              schema:
+                default: false
+                type: boolean
+              variable: acl_enable
+            - description: The name of the dataset to use for storage.
+              label: Dataset Name
+              schema:
+                default: config
+                hidden: true
+                required: true
+                type: string
+              variable: dataset_name
+            - label: ACL Configuration
+              schema:
+                attrs: []
+                show_if:
+                - - acl_enable
+                  - '='
+                  - true
+                type: dict
+              variable: acl_entries
+            show_if:
+            - - type
+              - '='
+              - ix_volume
+            type: dict
+          variable: ix_volume_config
+        - label: Host Path Configuration
+          schema:
+            attrs:
+            - description: Enable ACL for the storage.
+              label: Enable ACL
+              schema:
+                default: false
+                type: boolean
+              variable: acl_enable
+            - label: ACL Configuration
+              schema:
+                $ref:
+                - normalize/acl
+                attrs: []
+                show_if:
+                - - acl_enable
+                  - '='
+                  - true
+                type: dict
+              variable: acl
+            - description: The host path to use for storage.
+              label: Host Path
+              schema:
+                required: true
+                show_if:
+                - - acl_enable
+                  - '='
+                  - false
+                type: hostpath
+              variable: path
+            show_if:
+            - - type
+              - '='
+              - host_path
+            type: dict
+          variable: host_path_config
+        type: dict
+      variable: config
+      description: Shared persistent configuration for the worker and dashboard. Existing
+        config.json is preserved.
+    type: dict
+  variable: storage
+- group: Labels Configuration
+  label: ''
+  schema:
+    default: []
+    items:
+    - label: Label
+      schema:
+        attrs:
+        - label: Key
+          schema:
+            required: true
+            type: string
+          variable: key
+        - label: Value
+          schema:
+            required: true
+            type: string
+          variable: value
+        - description: Containers where the label should be applied
+          label: Containers
+          schema:
+            items:
+            - label: Container
+              schema:
+                enum:
+                - value: worker
+                  description: worker
+                - value: dashboard
+                  description: dashboard
+                required: true
+                type: string
+              variable: container
+            type: list
+          variable: containers
+        type: dict
+      variable: label
+    type: list
+  variable: labels
+- group: Resources Configuration
+  label: ''
+  schema:
+    attrs:
+    - label: Limits
+      schema:
+        attrs:
+        - description: CPUs limit for iSponsorBlockTV.
+          label: CPUs
+          schema:
+            default: 1
+            required: true
+            type: int
+          variable: cpus
+        - description: Memory limit for iSponsorBlockTV.
+          label: Memory (in MB)
+          schema:
+            default: 512
+            required: true
+            type: int
+          variable: memory
+        type: dict
+      variable: limits
+    type: dict
+  variable: resources
